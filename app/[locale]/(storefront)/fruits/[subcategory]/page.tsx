@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: `/fruits/${category.slug}`,
-    title: `${category.name[locale]} | Qtouf`,
+    title: `${category.name[locale]} | Qutoof`,
     description:
       locale === 'en'
         ? `Fresh ${category.name.en.toLowerCase()} delivered across the UAE.`

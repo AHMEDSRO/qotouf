@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   return buildMetadata({
     locale,
     path: '/vegetables',
-    title: locale === 'en' ? 'Fresh Vegetables | Qtouf' : 'خضار طازة | قطوف',
+    title: locale === 'en' ? 'Fresh Vegetables | Qutoof' : 'خضار طازة | قطوف',
     description:
       locale === 'en'
         ? 'Browse fresh vegetables delivered across the UAE — retail and wholesale pricing.'

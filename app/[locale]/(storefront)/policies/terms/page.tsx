@@ -29,7 +29,7 @@ export default function TermsPage({ params }: { params: { locale: string } }) {
 
   return (
     <PolicyPage locale={locale} titleEn="Terms & Conditions" titleAr="الشروط والأحكام">
-      <p>By using the Qtouf platform, you agree to these terms.</p>
+      <p>By using the Qutoof platform, you agree to these terms.</p>
       <h2>Accounts</h2>
       <p>The platform supports two account types: retail (individuals) and wholesale (businesses). Wholesale registration is instant; uploading a trade license is encouraged to build trust but isn’t required to open an account.</p>
       <h2>Pricing and VAT</h2>

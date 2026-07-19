@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildMetadata({
     locale,
     path: `/product/${product.slug}`,
-    title: `${product.name[locale]} | Qtouf`,
+    title: `${product.name[locale]} | Qutoof`,
     description: product.description[locale],
   });
 }

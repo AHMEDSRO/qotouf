@@ -6,7 +6,7 @@ export function seedUsers(): UserProfile[] {
   return [
     {
       id: 'user-super-admin',
-      email: 'ahmed@qtouf.ae',
+      email: 'ahmed@qutoof.ae',
       fullName: 'Ahmed (Super Admin)',
       role: 'super_admin',
       locale: 'ar',
@@ -14,7 +14,7 @@ export function seedUsers(): UserProfile[] {
     },
     {
       id: 'user-admin',
-      email: 'admin@qtouf.ae',
+      email: 'admin@qutoof.ae',
       fullName: 'Admin User',
       role: 'admin',
       locale: 'ar',
@@ -22,7 +22,7 @@ export function seedUsers(): UserProfile[] {
     },
     {
       id: 'user-accountant',
-      email: 'accounts@qtouf.ae',
+      email: 'accounts@qutoof.ae',
       fullName: 'Accountant User',
       role: 'accountant',
       locale: 'ar',
@@ -30,7 +30,7 @@ export function seedUsers(): UserProfile[] {
     },
     {
       id: 'user-sales-rep',
-      email: 'sales@qtouf.ae',
+      email: 'sales@qutoof.ae',
       fullName: 'Sales Rep User',
       role: 'sales_rep',
       locale: 'ar',
@@ -38,7 +38,7 @@ export function seedUsers(): UserProfile[] {
     },
     {
       id: 'user-warehouse',
-      email: 'warehouse@qtouf.ae',
+      email: 'warehouse@qutoof.ae',
       fullName: 'Warehouse User',
       role: 'warehouse',
       locale: 'ar',

@@ -27,7 +27,7 @@ export default function DeliveryPolicyPage({ params }: { params: { locale: strin
 
   return (
     <PolicyPage locale={locale} titleEn="Delivery Policy" titleAr="سياسة التوصيل">
-      <p>Qtouf delivers fresh vegetables and fruit across all seven emirates: Dubai, Abu Dhabi, Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah, and Fujairah.</p>
+      <p>Qutoof delivers fresh vegetables and fruit across all seven emirates: Dubai, Abu Dhabi, Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah, and Fujairah.</p>
       <h2>Delivery fees</h2>
       <p>Delivery fees vary by area and are shown clearly at checkout before you confirm your order — no hidden charges.</p>
       <h2>Delivery windows</h2>

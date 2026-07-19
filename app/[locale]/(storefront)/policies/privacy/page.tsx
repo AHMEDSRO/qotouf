@@ -38,7 +38,7 @@ export default function PrivacyPolicyPage({ params }: { params: { locale: string
       <h2>How we use it</h2>
       <p>To fulfil and deliver your orders, manage your account and credit limit (for wholesale customers), and contact you about order status.</p>
       <h2>Who can see it</h2>
-      <p>Only authorized Qtouf staff (based on their role), and the service providers we work with (database hosting, payment gateway) — all bound to protect your data.</p>
+      <p>Only authorized Qutoof staff (based on their role), and the service providers we work with (database hosting, payment gateway) — all bound to protect your data.</p>
       <h2>Your rights</h2>
       <p>You can request to view, correct, or delete your data at any time by contacting us.</p>
     </PolicyPage>

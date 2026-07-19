@@ -26,7 +26,7 @@ export interface Dictionary {
 }
 
 const en: Dictionary = {
-  brand: 'Qtouf',
+  brand: 'Qutoof',
   nav: {
     vegetables: 'Vegetables',
     fruits: 'Fruits',

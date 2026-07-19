@@ -5,7 +5,7 @@ const DEFAULT_NUMBER = '971500000000';
 
 export function WhatsAppButton({ locale }: { locale: Locale }) {
   const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || DEFAULT_NUMBER;
-  const message = encodeURIComponent(locale === 'en' ? 'Hi Qtouf, I have a question about an order.' : 'أهلاً قطوف، عندي سؤال عن أوردر.');
+  const message = encodeURIComponent(locale === 'en' ? 'Hi Qutoof, I have a question about an order.' : 'أهلاً قطوف، عندي سؤال عن أوردر.');
 
   return (
     <a
