@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/Card';
 export default async function DashboardOverviewPage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
 
   const products = await productRepository.list(ctx);
   const orders = can(ctx.role, 'view_all_orders') ? await orderRepository.list(ctx) : [];

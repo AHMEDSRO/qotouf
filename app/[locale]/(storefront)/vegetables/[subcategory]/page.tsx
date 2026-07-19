@@ -14,7 +14,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isLocale(params.locale)) return {};
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const categories = await categoryRepository.list(ctx);
   const category = categories.find((c) => c.slug === params.subcategory && c.type === 'vegetables');
   if (!category) return {};

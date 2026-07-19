@@ -3,7 +3,7 @@ import { orderRepository } from '@/lib/data';
 import { getRequestContext } from '@/lib/auth/session';
 
 export async function GET(_request: Request, { params }: { params: { id: string } }) {
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   try {
     const order = await orderRepository.getById(ctx, params.id);
     if (!order) return NextResponse.json({ error: 'Not found' }, { status: 404 });

@@ -4,7 +4,7 @@ import { getRequestContext } from '@/lib/auth/session';
 import type { NewProduct } from '@/lib/excel/product-import';
 
 export async function POST(request: NextRequest) {
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const body = (await request.json()) as { rows: NewProduct[] };
 
   if (!body.rows?.length) {

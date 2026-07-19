@@ -7,12 +7,14 @@ export interface RequestContext {
 }
 
 /**
- * Abstraction over "who is making this request" — the mock (cookie-based)
- * implementation lives in session.ts. When real Supabase Auth ships, a
- * SupabaseAuthProvider implementing this same interface replaces it with no
- * changes needed in pages/components that only depend on RequestContext.
+ * Abstraction over "who is making this request" — backed by real Supabase Auth
+ * (lib/auth/session.ts). Both methods are async because resolving the session
+ * requires a round-trip to Supabase Auth.
  */
 export interface AuthProvider {
-  getRequestContext(): RequestContext;
-  getCurrentUser(): UserProfile | null;
+  getRequestContext(): Promise<RequestContext>;
+  getCurrentUser(): Promise<UserProfile | null>;
 }
+
+/** Fallback context for anonymous visitors — same shape retail browsing always used. */
+export const GUEST_CONTEXT: RequestContext = { userId: 'guest', role: 'retail_customer' };

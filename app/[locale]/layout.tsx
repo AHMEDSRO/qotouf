@@ -10,7 +10,6 @@ import { fontDisplay, fontSans, fontArabic, fontMono } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { CartProvider } from '@/lib/cart/cart-context';
-import { RoleSwitcher } from '@/components/dev/RoleSwitcher';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 
 export function generateStaticParams() {
@@ -52,7 +51,6 @@ export default async function LocaleLayout({
           <main className="flex-1">{children}</main>
           <Footer locale={locale} dict={dict} />
           <WhatsAppButton locale={locale} />
-          <RoleSwitcher locale={locale} />
         </CartProvider>
       </body>
     </html>

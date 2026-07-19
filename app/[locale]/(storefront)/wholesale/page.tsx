@@ -10,7 +10,7 @@ import { buttonVariants } from '@/components/ui/Button';
 export default async function WholesalePage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const showWholesale = can(ctx.role, 'view_wholesale_pricing');
 
   const products = showWholesale

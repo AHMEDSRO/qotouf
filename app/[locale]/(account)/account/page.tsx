@@ -7,11 +7,12 @@ import { EMIRATE_LABELS } from '@/lib/types/common';
 import { formatMoney } from '@/lib/format';
 import { buttonVariants } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { SignOutButton } from '@/components/auth/SignOutButton';
 
-export default function AccountPage({ params }: { params: { locale: string } }) {
+export default async function AccountPage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const user = getCurrentUser();
+  const user = await getCurrentUser();
 
   if (!user) {
     return (
@@ -65,9 +66,12 @@ export default function AccountPage({ params }: { params: { locale: string } }) 
         )}
       </div>
 
-      <Link href={`/${locale}/account/orders`} className={buttonVariants({ variant: 'outline', className: 'mt-6' })}>
-        {locale === 'en' ? 'Order history' : 'سجل الطلبات'}
-      </Link>
+      <div className="mt-6 flex items-center gap-3">
+        <Link href={`/${locale}/account/orders`} className={buttonVariants({ variant: 'outline' })}>
+          {locale === 'en' ? 'Order history' : 'سجل الطلبات'}
+        </Link>
+        <SignOutButton locale={locale} />
+      </div>
     </div>
   );
 }

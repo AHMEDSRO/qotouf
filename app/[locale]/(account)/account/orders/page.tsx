@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/Badge';
 export default async function OrderHistoryPage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const orders = await orderRepository.list(ctx);
   const sorted = [...orders].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 

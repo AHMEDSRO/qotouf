@@ -14,6 +14,7 @@ export default function RegisterRetailPage({ params }: { params: { locale: Local
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmEmailSent, setConfirmEmailSent] = useState(false);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -21,22 +22,42 @@ export default function RegisterRetailPage({ params }: { params: { locale: Local
     setError(null);
     const form = new FormData(e.currentTarget);
     try {
-      await registerRetail({
+      const result = await registerRetail({
         fullName: String(form.get('fullName')),
         email: String(form.get('email')),
+        password: String(form.get('password')),
         phone: String(form.get('phone') || '') || undefined,
         emirate: String(form.get('emirate')),
         area: String(form.get('area')),
         street: String(form.get('street')),
         locale,
       });
-      router.push(`/${locale}/account`);
-      router.refresh();
-    } catch {
-      setError(locale === 'en' ? 'Could not create account. Check your details.' : 'تعذر إنشاء الحساب. راجع البيانات.');
+      if (result.needsEmailConfirmation) {
+        setConfirmEmailSent(true);
+      } else {
+        router.push(`/${locale}/account`);
+        router.refresh();
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : locale === 'en' ? 'Could not create account.' : 'تعذر إنشاء الحساب.');
     } finally {
       setSubmitting(false);
     }
+  }
+
+  if (confirmEmailSent) {
+    return (
+      <div className="mx-auto max-w-sm px-4 py-16 text-center">
+        <h1 className="font-display text-2xl tracking-wide text-ink">
+          {locale === 'en' ? 'Check your email' : 'راجع إيميلك'}
+        </h1>
+        <p className="mt-2 text-ink-muted">
+          {locale === 'en'
+            ? 'We sent a confirmation link — click it to activate your account, then log in.'
+            : 'بعتنالك لينك تأكيد — دوس عليه عشان تفعّل حسابك، وبعدين سجل دخول.'}
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -53,6 +74,10 @@ export default function RegisterRetailPage({ params }: { params: { locale: Local
         <div>
           <label className="mb-1 block text-sm font-semibold text-ink">{locale === 'en' ? 'Email' : 'الإيميل'}</label>
           <Input name="email" type="email" required />
+        </div>
+        <div>
+          <label className="mb-1 block text-sm font-semibold text-ink">{locale === 'en' ? 'Password' : 'كلمة المرور'}</label>
+          <Input name="password" type="password" required minLength={8} />
         </div>
         <div>
           <label className="mb-1 block text-sm font-semibold text-ink">{locale === 'en' ? 'Phone' : 'الهاتف'}</label>

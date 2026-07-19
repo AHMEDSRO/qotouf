@@ -18,6 +18,11 @@ export const mockUserRepository: UserRepository = {
     return loadAll().find((u) => u.id === id) ?? null;
   },
 
+  async getByAuthId() {
+    // The mock store has no concept of Supabase Auth linkage — only relevant when DATA_SOURCE=supabase.
+    return null;
+  },
+
   async update(ctx, id, patch) {
     const isSelf = ctx.userId === id;
     if (!isSelf) {

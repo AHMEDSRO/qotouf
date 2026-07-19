@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/Badge';
 export default async function DashboardProductsPage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const showCost = can(ctx.role, 'view_cost_price');
 
   const [products, categories] = await Promise.all([productRepository.list(ctx), categoryRepository.list(ctx)]);

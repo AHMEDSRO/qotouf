@@ -6,10 +6,10 @@ import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 
-export default function PaymentsSettingsPage({ params }: { params: { locale: string } }) {
+export default async function PaymentsSettingsPage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   requirePermission(ctx, 'manage_payment_settings', `/${locale}/dashboard`);
 
   return (

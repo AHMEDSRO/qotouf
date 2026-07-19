@@ -21,7 +21,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isLocale(params.locale)) return {};
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const product = await productRepository.getBySlug(ctx, params.slug);
   if (!product) return {};
 
@@ -37,7 +37,7 @@ export default async function ProductPage({ params }: Props) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
   const dict = await getDictionary(locale);
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const showWholesale = can(ctx.role, 'view_wholesale_pricing');
 
   const product = await productRepository.getBySlug(ctx, params.slug);

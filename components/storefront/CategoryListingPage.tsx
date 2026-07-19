@@ -21,7 +21,7 @@ export async function CategoryListingPage({
   searchParams: Record<string, string | undefined>;
 }) {
   const dict = await getDictionary(locale);
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const showWholesale = can(ctx.role, 'view_wholesale_pricing');
 
   const allCategories = await categoryRepository.list(ctx);

@@ -12,7 +12,7 @@ import { Card } from '@/components/ui/Card';
 export default async function ReportsPage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   requirePermission(ctx, 'view_reports', `/${locale}/dashboard`);
 
   const [orders, products, users, regions] = await Promise.all([

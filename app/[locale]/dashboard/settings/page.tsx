@@ -5,10 +5,10 @@ import { getRequestContext } from '@/lib/auth/session';
 import { can } from '@/lib/rbac/permissions';
 import { Card } from '@/components/ui/Card';
 
-export default function SettingsPage({ params }: { params: { locale: string } }) {
+export default async function SettingsPage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
 
   const links = [
     {

@@ -6,7 +6,7 @@ import { getRequestContext } from '@/lib/auth/session';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const [categories, products] = await Promise.all([categoryRepository.list(ctx), productRepository.list(ctx)]);
 
   const staticPaths = ['', '/vegetables', '/fruits', '/wholesale', '/search'];

@@ -5,7 +5,7 @@ import { getRequestContext } from '@/lib/auth/session';
 import { can } from '@/lib/rbac/permissions';
 
 export async function GET() {
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   if (!can(ctx.role, 'bulk_import_products')) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }

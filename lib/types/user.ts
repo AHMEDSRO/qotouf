@@ -43,7 +43,9 @@ export interface StaffProfile extends BaseProfile {
 
 export type UserProfile = RetailProfile | WholesaleProfile | StaffProfile;
 
-/** Omit that distributes over a union instead of collapsing it to shared keys. */
+/** Omit/Partial that distribute over a union instead of collapsing it to shared keys. */
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
+type DistributivePartial<T> = T extends unknown ? Partial<T> : never;
 
 export type NewUserProfile = DistributiveOmit<UserProfile, 'id' | 'createdAt'>;
+export type UserProfilePatch = DistributivePartial<UserProfile>;

@@ -5,7 +5,7 @@ import { buildLineItem, calculateTotals, type AccountType } from '@/lib/pricing/
 import type { PaymentMethod } from '@/lib/types/order';
 
 export async function GET() {
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const orders = await orderRepository.list(ctx);
   return NextResponse.json(orders);
 }
@@ -18,7 +18,7 @@ interface CheckoutBody {
 }
 
 export async function POST(request: NextRequest) {
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const body = (await request.json()) as CheckoutBody;
 
   if (!body.items?.length) {

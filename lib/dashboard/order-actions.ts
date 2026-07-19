@@ -9,7 +9,7 @@ import type { OrderStatus, PaymentMethod } from '@/lib/types/order';
 
 export async function updateOrderStatusAction(locale: string, orderId: string, formData: FormData) {
   const status = formData.get('status') as OrderStatus;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   await orderRepository.updateStatus(ctx, orderId, status);
   revalidatePath(`/${locale}/dashboard/orders/${orderId}`);
   revalidatePath(`/${locale}/dashboard/orders`);
@@ -17,7 +17,7 @@ export async function updateOrderStatusAction(locale: string, orderId: string, f
 
 /** Manual wholesale order creation from the dashboard — up to 5 product/quantity line slots. */
 export async function createWholesaleOrderAction(locale: string, formData: FormData) {
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const customerId = String(formData.get('customerId'));
   const salesRepId = String(formData.get('salesRepId') || '') || undefined;
   const deliveryRegionId = String(formData.get('deliveryRegionId'));

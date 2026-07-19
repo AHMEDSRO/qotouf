@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/Button';
 export default async function NewWholesaleOrderPage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   requirePermission(ctx, 'create_wholesale_order', `/${locale}/dashboard`);
 
   const [users, products, regions] = await Promise.all([

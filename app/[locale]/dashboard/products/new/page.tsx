@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/Button';
 export default async function NewProductPage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   requirePermission(ctx, 'edit_products', `/${locale}/dashboard`);
 
   const categories = await categoryRepository.list(ctx);

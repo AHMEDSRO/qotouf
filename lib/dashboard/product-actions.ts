@@ -34,7 +34,7 @@ const createProductSchema = z.object({
 export async function createProductAction(locale: string, formData: FormData) {
   const raw = Object.fromEntries(formData.entries());
   const data = createProductSchema.parse(raw);
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
 
   await productRepository.create(ctx, {
     slug: slugify(data.nameEn),
@@ -60,7 +60,7 @@ export async function createProductAction(locale: string, formData: FormData) {
 
 export async function adjustStockAction(locale: string, productId: string, formData: FormData) {
   const delta = Number(formData.get('delta'));
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   await productRepository.adjustStock(ctx, productId, delta);
   revalidatePath(`/${locale}/dashboard/inventory`);
 }

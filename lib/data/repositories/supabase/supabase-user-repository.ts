@@ -1,5 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase/admin-client';
-import type { UserProfile, Address, NewUserProfile } from '@/lib/types/user';
+import type { UserProfile, Address, NewUserProfile, UserProfilePatch } from '@/lib/types/user';
 import type { Role } from '@/lib/rbac/roles';
 import type { Locale } from '@/lib/types/common';
 import type { CreditLimit } from '@/lib/types/receivable';
@@ -51,7 +51,7 @@ function toUser(row: UserRow): UserProfile {
   return { ...base, role: row.role };
 }
 
-function fromUser(user: NewUserProfile | Partial<UserProfile>) {
+function fromUser(user: NewUserProfile | UserProfilePatch) {
   const row: Record<string, unknown> = {
     email: user.email,
     full_name: user.fullName,
@@ -83,6 +83,12 @@ export const supabaseUserRepository: UserRepository = {
     return data ? toUser(data as UserRow) : null;
   },
 
+  async getByAuthId(authUserId) {
+    const { data, error } = await supabaseAdmin.from('users').select('*').eq('auth_user_id', authUserId).maybeSingle();
+    if (error) throw error;
+    return data ? toUser(data as UserRow) : null;
+  },
+
   async update(ctx, id, patch) {
     const isSelf = ctx.userId === id;
     if (!isSelf) {
@@ -93,11 +99,11 @@ export const supabaseUserRepository: UserRepository = {
     return toUser(data as UserRow);
   },
 
-  async create(input) {
+  async create(input, authUserId) {
     const id = `user-${Date.now()}`;
     const { data, error } = await supabaseAdmin
       .from('users')
-      .insert({ id, ...fromUser(input) })
+      .insert({ id, auth_user_id: authUserId ?? null, ...fromUser(input) })
       .select()
       .single();
     if (error) throw error;

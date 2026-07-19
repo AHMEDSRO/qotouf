@@ -6,7 +6,7 @@ import { isStaffRole, ROLE_LABELS } from '@/lib/rbac/roles';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { Badge } from '@/components/ui/Badge';
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
   params,
 }: {
@@ -15,7 +15,7 @@ export default function DashboardLayout({
 }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
 
   if (!isStaffRole(ctx.role)) redirect(`/${locale}/account`);
 

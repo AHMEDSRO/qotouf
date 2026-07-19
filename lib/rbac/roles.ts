@@ -7,7 +7,9 @@ export type Role =
   | 'retail_customer'
   | 'wholesale_customer';
 
-export const STAFF_ROLES: Role[] = ['super_admin', 'admin', 'accountant', 'sales_rep', 'warehouse'];
+export type StaffRole = Exclude<Role, 'retail_customer' | 'wholesale_customer'>;
+
+export const STAFF_ROLES: StaffRole[] = ['super_admin', 'admin', 'accountant', 'sales_rep', 'warehouse'];
 
 export const ROLE_LABELS: Record<Role, { en: string; ar: string }> = {
   super_admin: { en: 'Super Admin', ar: 'المدير العام' },
@@ -19,6 +21,6 @@ export const ROLE_LABELS: Record<Role, { en: string; ar: string }> = {
   wholesale_customer: { en: 'Wholesale Customer', ar: 'عميل جملة' },
 };
 
-export function isStaffRole(role: Role): boolean {
-  return STAFF_ROLES.includes(role);
+export function isStaffRole(role: Role): role is StaffRole {
+  return (STAFF_ROLES as Role[]).includes(role);
 }

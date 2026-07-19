@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/Button';
 export default async function DashboardOrderDetailPage({ params }: { params: { locale: string; id: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
 
   const order = await orderRepository.getById(ctx, params.id).catch(() => null);
   if (!order) notFound();

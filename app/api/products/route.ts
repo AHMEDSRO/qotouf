@@ -3,7 +3,7 @@ import { productRepository } from '@/lib/data';
 import { getRequestContext } from '@/lib/auth/session';
 
 export async function GET(request: NextRequest) {
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const { searchParams } = new URL(request.url);
   const ids = searchParams.get('ids');
 

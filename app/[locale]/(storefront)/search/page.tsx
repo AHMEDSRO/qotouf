@@ -17,7 +17,7 @@ export default async function SearchPage({
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
   const dict = await getDictionary(locale);
-  const ctx = getRequestContext();
+  const ctx = await getRequestContext();
   const showWholesale = can(ctx.role, 'view_wholesale_pricing');
   const query = searchParams.q ?? '';
 
