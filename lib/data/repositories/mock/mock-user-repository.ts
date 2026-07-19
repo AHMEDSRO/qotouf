@@ -1,0 +1,41 @@
+import { readCollection, writeCollection } from '@/lib/data/store';
+import { seedUsers } from '@/lib/data/mock/users';
+import type { UserProfile } from '@/lib/types/user';
+import { assertCan } from '@/lib/rbac/permissions';
+import type { UserRepository } from '../user-repository';
+
+function loadAll(): UserProfile[] {
+  return readCollection<UserProfile>('users', seedUsers);
+}
+
+export const mockUserRepository: UserRepository = {
+  async list(ctx) {
+    assertCan(ctx.role, 'manage_users');
+    return loadAll();
+  },
+
+  async getById(_ctx, id) {
+    return loadAll().find((u) => u.id === id) ?? null;
+  },
+
+  async update(ctx, id, patch) {
+    const isSelf = ctx.userId === id;
+    if (!isSelf) {
+      assertCan(ctx.role, 'manage_users');
+    }
+    const users = loadAll();
+    const index = users.findIndex((u) => u.id === id);
+    if (index === -1) throw new Error(`User not found: ${id}`);
+    const updated = { ...users[index], ...patch } as UserProfile;
+    users[index] = updated;
+    writeCollection('users', users);
+    return updated;
+  },
+
+  async create(input) {
+    const users = loadAll();
+    const user = { ...input, id: `user-${Date.now()}`, createdAt: new Date().toISOString() } as UserProfile;
+    writeCollection('users', [...users, user]);
+    return user;
+  },
+};
