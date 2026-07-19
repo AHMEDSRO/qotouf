@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { User } from 'lucide-react';
 import type { Locale } from '@/lib/i18n/config';
 import type { Dictionary } from '@/lib/i18n/get-dictionary';
@@ -10,8 +11,8 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <header className="bg-primary text-primary-foreground">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
-        <Link href={`/${locale}`} className="font-display text-2xl tracking-wide">
-          {dict.brand}
+        <Link href={`/${locale}`} className="flex items-center rounded-card bg-surface px-3 py-1.5 shadow-sm">
+          <Image src="/logo.jpg" alt={dict.brand} width={140} height={35} className="h-9 w-auto" priority />
         </Link>
 
         <nav className="order-3 flex w-full items-center gap-6 text-sm font-semibold uppercase tracking-wide sm:order-none sm:w-auto">
