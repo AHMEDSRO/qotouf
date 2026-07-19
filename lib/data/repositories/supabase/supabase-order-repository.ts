@@ -110,7 +110,13 @@ export const supabaseOrderRepository: OrderRepository = {
     if (error) throw error;
 
     const order = toOrder(data as OrderRow);
-    await notifier.notify({ type: 'order_created', orderId: order.id, orderNumber: order.orderNumber, customerId: order.customerId });
+    await notifier.notify({
+      type: 'order_created',
+      orderId: order.id,
+      orderNumber: order.orderNumber,
+      customerId: order.customerId,
+      salesRepId: order.salesRepId,
+    });
     return order;
   },
 

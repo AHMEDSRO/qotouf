@@ -2,6 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin-client';
 import type { Product, PublicProduct, ProductImage, ProductUnit, ListingType } from '@/lib/types/product';
 import type { RequestContext } from '@/lib/auth/auth-provider';
 import { assertCan, can } from '@/lib/rbac/permissions';
+import { notifier } from '@/lib/notifications/notifier';
 import type { ProductRepository, ProductFilters } from '../product-repository';
 
 interface ProductRow {
@@ -180,7 +181,7 @@ export const supabaseProductRepository: ProductRepository = {
     assertCan(ctx.role, 'adjust_inventory');
     const { data: current, error: fetchError } = await supabaseAdmin
       .from('products')
-      .select('quantity_in_stock')
+      .select('quantity_in_stock, low_stock_threshold, name_en')
       .eq('id', id)
       .maybeSingle();
     if (fetchError) throw fetchError;
@@ -194,6 +195,12 @@ export const supabaseProductRepository: ProductRepository = {
       .select()
       .single();
     if (error) throw error;
+
+    // Only fire on the crossing into low stock, not on every adjustment while already low.
+    if (newQuantity <= current.low_stock_threshold && current.quantity_in_stock > current.low_stock_threshold) {
+      await notifier.notify({ type: 'low_stock', productId: id, productName: current.name_en, quantityInStock: newQuantity });
+    }
+
     return toProduct(data as ProductRow);
   },
 };

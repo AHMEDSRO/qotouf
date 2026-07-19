@@ -52,7 +52,13 @@ export const mockOrderRepository: OrderRepository = {
       updatedAt: now,
     };
     writeCollection('orders', [...orders, order]);
-    await notifier.notify({ type: 'order_created', orderId: order.id, orderNumber: order.orderNumber, customerId: order.customerId });
+    await notifier.notify({
+      type: 'order_created',
+      orderId: order.id,
+      orderNumber: order.orderNumber,
+      customerId: order.customerId,
+      salesRepId: order.salesRepId,
+    });
     return order;
   },
 

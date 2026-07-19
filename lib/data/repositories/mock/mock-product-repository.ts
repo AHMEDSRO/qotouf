@@ -3,6 +3,7 @@ import { seedProducts } from '@/lib/data/mock/products';
 import type { Product, PublicProduct } from '@/lib/types/product';
 import type { RequestContext } from '@/lib/auth/auth-provider';
 import { assertCan, can } from '@/lib/rbac/permissions';
+import { notifier } from '@/lib/notifications/notifier';
 import type { ProductRepository, ProductFilters } from '../product-repository';
 
 function loadAll(): Product[] {
@@ -120,13 +121,19 @@ export const mockProductRepository: ProductRepository = {
     const products = loadAll();
     const index = products.findIndex((p) => p.id === id);
     if (index === -1) throw new Error(`Product not found: ${id}`);
+    const before = products[index];
     const updated: Product = {
-      ...products[index],
-      quantityInStock: Math.max(0, products[index].quantityInStock + quantityDelta),
+      ...before,
+      quantityInStock: Math.max(0, before.quantityInStock + quantityDelta),
       updatedAt: new Date().toISOString(),
     };
     products[index] = updated;
     writeCollection('products', products);
+
+    if (updated.quantityInStock <= updated.lowStockThreshold && before.quantityInStock > before.lowStockThreshold) {
+      await notifier.notify({ type: 'low_stock', productId: id, productName: updated.name.en, quantityInStock: updated.quantityInStock });
+    }
+
     return updated;
   },
 };

@@ -4,6 +4,7 @@ import { isLocale, type Locale } from '@/lib/i18n/config';
 import { getRequestContext } from '@/lib/auth/session';
 import { isStaffRole, ROLE_LABELS } from '@/lib/rbac/roles';
 import { Sidebar } from '@/components/dashboard/Sidebar';
+import { NotificationBell } from '@/components/dashboard/NotificationBell';
 import { Badge } from '@/components/ui/Badge';
 
 export default async function DashboardLayout({
@@ -24,14 +25,20 @@ export default async function DashboardLayout({
       <div>
         <div className="mb-4 flex items-center justify-between gap-2 lg:hidden">
           <span className="font-display text-lg tracking-wide text-ink">{locale === 'en' ? 'Dashboard' : 'لوحة التحكم'}</span>
-          <Badge variant="primary">{ROLE_LABELS[ctx.role][locale]}</Badge>
+          <div className="flex items-center gap-2">
+            <NotificationBell userId={ctx.userId} locale={locale} />
+            <Badge variant="primary">{ROLE_LABELS[ctx.role][locale]}</Badge>
+          </div>
         </div>
         <Sidebar locale={locale} role={ctx.role} />
       </div>
       <div className="flex-1">
         <div className="mb-6 hidden items-center justify-between lg:flex">
           <h1 className="font-display text-2xl tracking-wide text-ink">{locale === 'en' ? 'Dashboard' : 'لوحة التحكم'}</h1>
-          <Badge variant="primary">{ROLE_LABELS[ctx.role][locale]}</Badge>
+          <div className="flex items-center gap-2">
+            <NotificationBell userId={ctx.userId} locale={locale} />
+            <Badge variant="primary">{ROLE_LABELS[ctx.role][locale]}</Badge>
+          </div>
         </div>
         {children}
       </div>
