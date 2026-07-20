@@ -11,6 +11,9 @@ import { cn } from '@/lib/utils';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { CartProvider } from '@/lib/cart/cart-context';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { settingsRepository } from '@/lib/data';
+
+const DEFAULT_WHATSAPP_NUMBER = '971500000000';
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -38,6 +41,7 @@ export default async function LocaleLayout({
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale as Locale;
   const dict = await getDictionary(locale);
+  const settings = await settingsRepository.get();
 
   return (
     <html
@@ -50,7 +54,7 @@ export default async function LocaleLayout({
           <Header locale={locale} dict={dict} />
           <main className="flex-1">{children}</main>
           <Footer locale={locale} dict={dict} />
-          <WhatsAppButton locale={locale} />
+          <WhatsAppButton locale={locale} number={settings.whatsappNumber || DEFAULT_WHATSAPP_NUMBER} />
         </CartProvider>
       </body>
     </html>

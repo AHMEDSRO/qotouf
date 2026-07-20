@@ -3,11 +3,13 @@ import { mockCategoryRepository } from './repositories/mock/mock-category-reposi
 import { mockOrderRepository } from './repositories/mock/mock-order-repository';
 import { mockUserRepository } from './repositories/mock/mock-user-repository';
 import { mockDeliveryRepository } from './repositories/mock/mock-delivery-repository';
+import { mockSettingsRepository } from './repositories/mock/mock-settings-repository';
 import { supabaseProductRepository } from './repositories/supabase/supabase-product-repository';
 import { supabaseCategoryRepository } from './repositories/supabase/supabase-category-repository';
 import { supabaseOrderRepository } from './repositories/supabase/supabase-order-repository';
 import { supabaseUserRepository } from './repositories/supabase/supabase-user-repository';
 import { supabaseDeliveryRepository } from './repositories/supabase/supabase-delivery-repository';
+import { supabaseSettingsRepository } from './repositories/supabase/supabase-settings-repository';
 
 const useSupabase = process.env.DATA_SOURCE === 'supabase';
 
@@ -16,3 +18,4 @@ export const categoryRepository = useSupabase ? supabaseCategoryRepository : moc
 export const orderRepository = useSupabase ? supabaseOrderRepository : mockOrderRepository;
 export const userRepository = useSupabase ? supabaseUserRepository : mockUserRepository;
 export const deliveryRepository = useSupabase ? supabaseDeliveryRepository : mockDeliveryRepository;
+export const settingsRepository = useSupabase ? supabaseSettingsRepository : mockSettingsRepository;

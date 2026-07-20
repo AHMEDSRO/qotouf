@@ -3,6 +3,7 @@ import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/
 import type { Order } from '@/lib/types/order';
 import type { UserProfile } from '@/lib/types/user';
 import type { DeliveryRegion } from '@/lib/types/delivery';
+import type { PlatformSettings } from '@/lib/types/settings';
 import { EMIRATE_LABELS } from '@/lib/types/common';
 import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS, PAYMENT_METHOD_LABELS } from '@/lib/types/order';
 
@@ -59,9 +60,10 @@ interface InvoiceProps {
   customer: UserProfile | null;
   region: DeliveryRegion | null;
   logoDataUri: string | null;
+  settings: PlatformSettings;
 }
 
-export function InvoiceDocument({ order, customer, region, logoDataUri }: InvoiceProps) {
+export function InvoiceDocument({ order, customer, region, logoDataUri, settings }: InvoiceProps) {
   ensureFont();
 
   const billToName = customer?.role === 'wholesale_customer' ? customer.businessName : customer?.fullName ?? order.customerId;
@@ -141,11 +143,22 @@ export function InvoiceDocument({ order, customer, region, logoDataUri }: Invoic
           </View>
         </View>
 
+        {order.paymentMethod === 'bank_transfer' && (settings.bankName || settings.bankIban) && (
+          <View style={[styles.section, { marginTop: 16 }]}>
+            <Text style={styles.sectionTitle}>Bank transfer details / بيانات التحويل البنكي</Text>
+            {settings.bankName && <Text>Bank: {settings.bankName}</Text>}
+            {settings.bankAccountName && <Text>Account name: {settings.bankAccountName}</Text>}
+            {settings.bankAccountNumber && <Text>Account number: {settings.bankAccountNumber}</Text>}
+            {settings.bankIban && <Text>IBAN: {settings.bankIban}</Text>}
+          </View>
+        )}
+
         <View style={styles.footer}>
           <Text>
             Payment method: {PAYMENT_METHOD_LABELS[order.paymentMethod].en} · Payment status: {PAYMENT_STATUS_LABELS[order.paymentStatus].en}
           </Text>
           {order.notes && <Text>Notes: {order.notes}</Text>}
+          {settings.invoiceEmails.length > 0 && <Text>Questions? {settings.invoiceEmails.join(' · ')}</Text>}
           <Text style={{ marginTop: 4 }}>Thank you for your order — Qutoof.</Text>
         </View>
       </Page>

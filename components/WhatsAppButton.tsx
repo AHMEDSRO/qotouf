@@ -1,10 +1,7 @@
 import { MessageCircle } from 'lucide-react';
 import type { Locale } from '@/lib/i18n/config';
 
-const DEFAULT_NUMBER = '971500000000';
-
-export function WhatsAppButton({ locale }: { locale: Locale }) {
-  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || DEFAULT_NUMBER;
+export function WhatsAppButton({ locale, number }: { locale: Locale; number: string }) {
   const message = encodeURIComponent(locale === 'en' ? 'Hi Qutoof, I have a question about an order.' : 'أهلاً قطوف، عندي سؤال عن أوردر.');
 
   return (
