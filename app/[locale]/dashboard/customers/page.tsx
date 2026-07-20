@@ -7,9 +7,10 @@ import { requirePermission } from '@/lib/rbac/guard';
 import { formatMoney } from '@/lib/format';
 import { updateCreditLimitAction } from '@/lib/dashboard/customer-actions';
 import { DataTable } from '@/components/dashboard/DataTable';
+import { RoleGate } from '@/components/dashboard/RoleGate';
 import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
-import { Button } from '@/components/ui/Button';
+import { Button, buttonVariants } from '@/components/ui/Button';
 import type { RetailProfile, WholesaleProfile } from '@/lib/types/user';
 
 export default async function CustomersPage({ params }: { params: { locale: string } }) {
@@ -27,7 +28,14 @@ export default async function CustomersPage({ params }: { params: { locale: stri
 
   return (
     <div className="space-y-4">
-      <h2 className="font-display text-xl tracking-wide text-ink">{locale === 'en' ? 'Customers' : 'العملاء'}</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="font-display text-xl tracking-wide text-ink">{locale === 'en' ? 'Customers' : 'العملاء'}</h2>
+        <RoleGate role={ctx.role} action="create_wholesale_order">
+          <Link href={`/${locale}/dashboard/customers/new`} className={buttonVariants({ variant: 'accent', size: 'sm' })}>
+            {locale === 'en' ? 'Add customer' : 'إضافة عميل'}
+          </Link>
+        </RoleGate>
+      </div>
 
       <DataTable
         rowKey={(c) => c.id}
