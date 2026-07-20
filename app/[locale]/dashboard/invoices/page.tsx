@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { orderRepository, userRepository } from '@/lib/data';
 import { getRequestContext } from '@/lib/auth/session';
 import { requirePermission } from '@/lib/rbac/guard';
-import { ORDER_STATUS_LABELS } from '@/lib/types/order';
+import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS } from '@/lib/types/order';
 import { formatMoney } from '@/lib/format';
 import { DataTable } from '@/components/dashboard/DataTable';
 import { Badge } from '@/components/ui/Badge';
@@ -24,6 +24,7 @@ export default async function InvoicesPage({ params }: { params: { locale: strin
   const paymentStatusVariant = {
     paid: 'primary' as const,
     unpaid: 'accent' as const,
+    pending_confirmation: 'accent' as const,
     partially_paid: 'accent' as const,
     refunded: 'neutral' as const,
   };
@@ -53,7 +54,7 @@ export default async function InvoicesPage({ params }: { params: { locale: strin
           { header: locale === 'en' ? 'Status' : 'الحالة', render: (o) => <Badge variant="primary">{ORDER_STATUS_LABELS[o.status][locale]}</Badge> },
           {
             header: locale === 'en' ? 'Payment' : 'الدفع',
-            render: (o) => <Badge variant={paymentStatusVariant[o.paymentStatus]}>{o.paymentStatus.replace('_', ' ')}</Badge>,
+            render: (o) => <Badge variant={paymentStatusVariant[o.paymentStatus]}>{PAYMENT_STATUS_LABELS[o.paymentStatus][locale]}</Badge>,
           },
           { header: locale === 'en' ? 'Total' : 'الإجمالي', render: (o) => <span className="font-mono">{formatMoney(o.totals.total, locale)}</span> },
           {

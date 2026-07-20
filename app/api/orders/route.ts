@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { orderRepository, productRepository, deliveryRepository } from '@/lib/data';
 import { getRequestContext } from '@/lib/auth/session';
-import { buildLineItem, calculateTotals, type AccountType } from '@/lib/pricing/pricing';
+import { buildLineItem, calculateTotals, initialPaymentStatus, type AccountType } from '@/lib/pricing/pricing';
 import type { PaymentMethod } from '@/lib/types/order';
 
 export async function GET() {
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     status: 'pending_review',
     deliveryRegionId: region.id,
     paymentMethod: body.paymentMethod,
-    paymentStatus: 'unpaid',
+    paymentStatus: initialPaymentStatus(body.paymentMethod),
     notes: body.notes,
   });
 

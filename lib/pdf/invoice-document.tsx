@@ -4,7 +4,7 @@ import type { Order } from '@/lib/types/order';
 import type { UserProfile } from '@/lib/types/user';
 import type { DeliveryRegion } from '@/lib/types/delivery';
 import { EMIRATE_LABELS } from '@/lib/types/common';
-import { ORDER_STATUS_LABELS } from '@/lib/types/order';
+import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS, PAYMENT_METHOD_LABELS } from '@/lib/types/order';
 
 let fontRegistered = false;
 function ensureFont() {
@@ -143,7 +143,7 @@ export function InvoiceDocument({ order, customer, region, logoDataUri }: Invoic
 
         <View style={styles.footer}>
           <Text>
-            Payment method: {order.paymentMethod.replace('_', ' ')} · Payment status: {order.paymentStatus}
+            Payment method: {PAYMENT_METHOD_LABELS[order.paymentMethod].en} · Payment status: {PAYMENT_STATUS_LABELS[order.paymentStatus].en}
           </Text>
           {order.notes && <Text>Notes: {order.notes}</Text>}
           <Text style={{ marginTop: 4 }}>Thank you for your order — Qutoof.</Text>

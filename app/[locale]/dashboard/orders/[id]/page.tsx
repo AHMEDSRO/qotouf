@@ -3,9 +3,9 @@ import { notFound } from 'next/navigation';
 import { orderRepository, deliveryRepository, userRepository } from '@/lib/data';
 import { getRequestContext } from '@/lib/auth/session';
 import { can } from '@/lib/rbac/permissions';
-import { ORDER_STATUS_LABELS, ORDER_STATUS_TRANSITIONS } from '@/lib/types/order';
+import { ORDER_STATUS_LABELS, ORDER_STATUS_TRANSITIONS, PAYMENT_STATUS_LABELS, PAYMENT_METHOD_LABELS } from '@/lib/types/order';
 import { formatMoney } from '@/lib/format';
-import { updateOrderStatusAction } from '@/lib/dashboard/order-actions';
+import { updateOrderStatusAction, confirmPaymentReceivedAction } from '@/lib/dashboard/order-actions';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
@@ -25,6 +25,12 @@ export default async function DashboardOrderDetailPage({ params }: { params: { l
   const nextStatuses = ORDER_STATUS_TRANSITIONS[order.status];
   const canUpdateStatus = can(ctx.role, 'update_order_status');
   const action = updateOrderStatusAction.bind(null, locale, order.id);
+
+  const canConfirmPayment =
+    can(ctx.role, 'confirm_payments') && order.paymentMethod === 'bank_transfer' && order.paymentStatus === 'pending_confirmation';
+  const confirmAction = confirmPaymentReceivedAction.bind(null, locale, order.id);
+
+  const customerName = customer?.role === 'wholesale_customer' ? customer.businessName : (customer?.fullName ?? order.customerId);
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -46,7 +52,7 @@ export default async function DashboardOrderDetailPage({ params }: { params: { l
       <div className="grid grid-cols-2 gap-4 text-sm">
         <div>
           <p className="text-ink-muted">{locale === 'en' ? 'Customer' : 'العميل'}</p>
-          <p className="font-semibold text-ink">{customer?.fullName ?? order.customerId}</p>
+          <p className="font-semibold text-ink">{customerName}</p>
         </div>
         <div>
           <p className="text-ink-muted">{locale === 'en' ? 'Delivery area' : 'منطقة التوصيل'}</p>
@@ -55,7 +61,7 @@ export default async function DashboardOrderDetailPage({ params }: { params: { l
         <div>
           <p className="text-ink-muted">{locale === 'en' ? 'Payment' : 'الدفع'}</p>
           <p className="font-semibold text-ink">
-            {order.paymentMethod} · {order.paymentStatus}
+            {PAYMENT_METHOD_LABELS[order.paymentMethod][locale]} · {PAYMENT_STATUS_LABELS[order.paymentStatus][locale]}
           </p>
         </div>
         <div>
@@ -78,6 +84,19 @@ export default async function DashboardOrderDetailPage({ params }: { params: { l
           <span className="font-mono">{formatMoney(order.totals.total, locale)}</span>
         </div>
       </div>
+
+      {canConfirmPayment && (
+        <form action={confirmAction} className="rounded-card border border-accent/30 bg-accent/5 p-4">
+          <p className="text-sm text-ink">
+            {locale === 'en'
+              ? 'This order is waiting for bank transfer confirmation.'
+              : 'الطلب ده بانتظار تأكيد استلام التحويل البنكي.'}
+          </p>
+          <Button type="submit" variant="accent" size="sm" className="mt-2">
+            {locale === 'en' ? 'Confirm payment received' : 'تأكيد استلام الدفع'}
+          </Button>
+        </form>
+      )}
 
       {canUpdateStatus && nextStatuses.length > 0 && (
         <form action={action} className="flex items-center gap-2">

@@ -45,8 +45,23 @@ export interface OrderTotals {
   total: number;
 }
 
-export type PaymentMethod = 'card' | 'bank_transfer' | 'invoice_credit';
-export type PaymentStatus = 'unpaid' | 'paid' | 'partially_paid' | 'refunded';
+export type PaymentMethod = 'card' | 'bank_transfer' | 'cash' | 'invoice_credit';
+export type PaymentStatus = 'unpaid' | 'pending_confirmation' | 'paid' | 'partially_paid' | 'refunded';
+
+export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, LocalizedText> = {
+  unpaid: { en: 'Unpaid', ar: 'غير مدفوع' },
+  pending_confirmation: { en: 'Awaiting confirmation', ar: 'بانتظار التأكيد' },
+  paid: { en: 'Paid', ar: 'مدفوع' },
+  partially_paid: { en: 'Partially paid', ar: 'مدفوع جزئيًا' },
+  refunded: { en: 'Refunded', ar: 'مسترجع' },
+};
+
+export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, LocalizedText> = {
+  card: { en: 'Card', ar: 'بطاقة' },
+  bank_transfer: { en: 'Bank transfer', ar: 'تحويل بنكي' },
+  cash: { en: 'Cash', ar: 'كاش' },
+  invoice_credit: { en: 'Invoice / credit', ar: 'فاتورة آجلة' },
+};
 
 export interface OrderStatusEvent {
   status: OrderStatus;

@@ -14,7 +14,8 @@ export type Action =
   | 'manage_payment_settings'
   | 'manage_users'
   | 'edit_role_permissions'
-  | 'view_wholesale_pricing';
+  | 'view_wholesale_pricing'
+  | 'confirm_payments';
 
 export const ROLE_PERMISSIONS: Record<Role, Action[]> = {
   super_admin: [
@@ -31,6 +32,7 @@ export const ROLE_PERMISSIONS: Record<Role, Action[]> = {
     'manage_users',
     'edit_role_permissions',
     'view_wholesale_pricing',
+    'confirm_payments',
   ],
   admin: [
     'edit_products',
@@ -43,8 +45,9 @@ export const ROLE_PERMISSIONS: Record<Role, Action[]> = {
     'view_reports',
     'manage_payment_settings',
     'view_wholesale_pricing',
+    'confirm_payments',
   ],
-  accountant: ['view_cost_price', 'view_all_orders', 'view_reports', 'view_wholesale_pricing'],
+  accountant: ['view_cost_price', 'view_all_orders', 'view_reports', 'view_wholesale_pricing', 'confirm_payments'],
   sales_rep: ['create_wholesale_order', 'view_all_orders', 'view_wholesale_pricing'],
   warehouse: ['adjust_inventory', 'view_all_orders', 'update_order_status'],
   retail_customer: ['view_own_orders'],

@@ -53,6 +53,25 @@ async function nextOrderNumber(): Promise<string> {
   return `QT-${max + 1}`;
 }
 
+/** Keeps a wholesale customer's outstanding balance accurate as invoice-credit orders are placed and later paid off. No-op for non-wholesale customers. */
+async function adjustCreditBalance(customerId: string, delta: number): Promise<void> {
+  const { data: user, error: fetchError } = await supabaseAdmin
+    .from('users')
+    .select('role, credit_limit')
+    .eq('id', customerId)
+    .maybeSingle();
+  if (fetchError) throw fetchError;
+  if (!user || user.role !== 'wholesale_customer' || !user.credit_limit) return;
+
+  const currentBalance = Math.max(0, user.credit_limit.currentBalance + delta);
+  const availableCredit = Math.max(0, user.credit_limit.limit - currentBalance);
+  const { error: updateError } = await supabaseAdmin
+    .from('users')
+    .update({ credit_limit: { ...user.credit_limit, currentBalance, availableCredit } })
+    .eq('id', customerId);
+  if (updateError) throw updateError;
+}
+
 export const supabaseOrderRepository: OrderRepository = {
   async list(ctx) {
     let query = supabaseAdmin.from('orders').select('*');
@@ -110,6 +129,9 @@ export const supabaseOrderRepository: OrderRepository = {
     if (error) throw error;
 
     const order = toOrder(data as OrderRow);
+    if (order.paymentMethod === 'invoice_credit') {
+      await adjustCreditBalance(order.customerId, order.totals.total);
+    }
     await notifier.notify({
       type: 'order_created',
       orderId: order.id,
@@ -144,6 +166,29 @@ export const supabaseOrderRepository: OrderRepository = {
 
     const updated = toOrder(data as OrderRow);
     await notifier.notify({ type: 'order_status_changed', orderId: updated.id, orderNumber: updated.orderNumber, status });
+    return updated;
+  },
+
+  async confirmPayment(ctx, id) {
+    assertCan(ctx.role, 'confirm_payments');
+    const { data: current, error: fetchError } = await supabaseAdmin.from('orders').select('*').eq('id', id).maybeSingle();
+    if (fetchError) throw fetchError;
+    if (!current) throw new Error(`Order not found: ${id}`);
+    const existing = toOrder(current as OrderRow);
+    if (existing.paymentStatus === 'paid') return existing;
+
+    const { data, error } = await supabaseAdmin
+      .from('orders')
+      .update({ payment_status: 'paid', updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+    if (error) throw error;
+
+    const updated = toOrder(data as OrderRow);
+    if (updated.paymentMethod === 'invoice_credit') {
+      await adjustCreditBalance(updated.customerId, -updated.totals.total);
+    }
     return updated;
   },
 };

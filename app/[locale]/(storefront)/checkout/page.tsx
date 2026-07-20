@@ -9,6 +9,7 @@ import type { PaymentMethod } from '@/lib/types/order';
 import { EMIRATE_LABELS } from '@/lib/types/common';
 import { useCart } from '@/lib/cart/cart-context';
 import { buildLineItem, calculateTotals, type AccountType } from '@/lib/pricing/pricing';
+import { paymentOptionsFor } from '@/lib/orders/payment-options';
 import { CartSummary } from '@/components/cart/CartSummary';
 import { Button } from '@/components/ui/Button';
 
@@ -35,7 +36,7 @@ export default function CheckoutPage({ params }: { params: { locale: Locale } })
     ]).then(([session, regionList]) => {
       const type: AccountType = session.role === 'wholesale_customer' ? 'wholesale' : 'retail';
       setAccountType(type);
-      setPaymentMethod(type === 'wholesale' ? 'invoice_credit' : 'bank_transfer');
+      setPaymentMethod(type === 'wholesale' ? 'invoice_credit' : 'cash');
       setRegions(regionList);
       if (regionList[0]) setRegionId(regionList[0].id);
       setSessionLoaded(true);
@@ -69,16 +70,7 @@ export default function CheckoutPage({ params }: { params: { locale: Locale } })
   const selectedRegion = regions.find((r) => r.id === regionId);
   const totals = calculateTotals(lines, selectedRegion?.deliveryFee ?? 0);
 
-  const paymentOptions: { value: PaymentMethod; label: string; disabled?: boolean }[] =
-    accountType === 'wholesale'
-      ? [
-          { value: 'invoice_credit', label: locale === 'en' ? 'Invoice / credit account' : 'فاتورة آجلة' },
-          { value: 'bank_transfer', label: locale === 'en' ? 'Bank transfer' : 'تحويل بنكي' },
-        ]
-      : [
-          { value: 'card', label: locale === 'en' ? 'Card (Stripe — coming soon)' : 'بطاقة (Stripe — قريبًا)', disabled: true },
-          { value: 'bank_transfer', label: locale === 'en' ? 'Bank transfer' : 'تحويل بنكي' },
-        ];
+  const paymentOptions = paymentOptionsFor(accountType, locale);
 
   async function handleSubmit() {
     if (!regionId || lines.length === 0) return;

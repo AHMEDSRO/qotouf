@@ -3,7 +3,7 @@ import { isLocale, type Locale } from '@/lib/i18n/config';
 import { notFound } from 'next/navigation';
 import { orderRepository, userRepository } from '@/lib/data';
 import { getRequestContext } from '@/lib/auth/session';
-import { ORDER_STATUS_LABELS } from '@/lib/types/order';
+import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS } from '@/lib/types/order';
 import { formatMoney } from '@/lib/format';
 import { DataTable } from '@/components/dashboard/DataTable';
 import { RoleGate } from '@/components/dashboard/RoleGate';
@@ -25,7 +25,7 @@ export default async function DashboardOrdersPage({ params }: { params: { locale
         <h2 className="font-display text-xl tracking-wide text-ink">{locale === 'en' ? 'Orders' : 'الطلبات'}</h2>
         <RoleGate role={ctx.role} action="create_wholesale_order">
           <Link href={`/${locale}/dashboard/orders/new`} className={buttonVariants({ variant: 'accent', size: 'sm' })}>
-            {locale === 'en' ? 'New wholesale order' : 'أوردر جملة جديد'}
+            {locale === 'en' ? 'New order' : 'أوردر جديد'}
           </Link>
         </RoleGate>
       </div>
@@ -53,6 +53,10 @@ export default async function DashboardOrdersPage({ params }: { params: { locale
           },
           { header: locale === 'en' ? 'Total' : 'الإجمالي', render: (o) => <span className="font-mono">{formatMoney(o.totals.total, locale)}</span> },
           { header: locale === 'en' ? 'Status' : 'الحالة', render: (o) => <Badge variant="primary">{ORDER_STATUS_LABELS[o.status][locale]}</Badge> },
+          {
+            header: locale === 'en' ? 'Payment' : 'الدفع',
+            render: (o) => <Badge variant={o.paymentStatus === 'paid' ? 'primary' : 'accent'}>{PAYMENT_STATUS_LABELS[o.paymentStatus][locale]}</Badge>,
+          },
           { header: locale === 'en' ? 'Date' : 'التاريخ', render: (o) => new Date(o.createdAt).toLocaleDateString(locale) },
         ]}
       />
