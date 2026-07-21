@@ -5,6 +5,10 @@ export interface PlatformSettings {
   bankAccountName: string | null;
   bankAccountNumber: string | null;
   bankIban: string | null;
+  instagramUrl: string | null;
+  facebookUrl: string | null;
+  tiktokUrl: string | null;
+  twitterUrl: string | null;
   updatedAt: string;
 }
 

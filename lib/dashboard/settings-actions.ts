@@ -12,6 +12,10 @@ const settingsSchema = z.object({
   bankAccountName: z.string().optional(),
   bankAccountNumber: z.string().optional(),
   bankIban: z.string().optional(),
+  instagramUrl: z.string().optional(),
+  facebookUrl: z.string().optional(),
+  tiktokUrl: z.string().optional(),
+  twitterUrl: z.string().optional(),
 });
 
 export async function updatePlatformSettingsAction(locale: string, formData: FormData) {
@@ -28,6 +32,10 @@ export async function updatePlatformSettingsAction(locale: string, formData: For
     bankAccountName: data.bankAccountName || null,
     bankAccountNumber: data.bankAccountNumber || null,
     bankIban: data.bankIban || null,
+    instagramUrl: data.instagramUrl || null,
+    facebookUrl: data.facebookUrl || null,
+    tiktokUrl: data.tiktokUrl || null,
+    twitterUrl: data.twitterUrl || null,
   });
 
   revalidatePath(`/${locale}/dashboard/settings/payments`);

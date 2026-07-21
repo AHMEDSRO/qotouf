@@ -81,6 +81,31 @@ export default async function PaymentsSettingsPage({ params }: { params: { local
             </label>
           </div>
 
+          <div className="border-t border-border pt-4">
+            <h4 className="text-sm font-semibold text-ink">{locale === 'en' ? 'Social media' : 'السوشيال ميديا'}</h4>
+            <p className="mt-1 text-xs text-ink-muted">
+              {locale === 'en' ? 'Shown as icons in the footer — leave blank to hide.' : 'بتظهر كأيقونات في الفوتر — سيبها فاضية عشان تختفي.'}
+            </p>
+            <div className="mt-3 grid grid-cols-2 gap-4">
+              <label className="block">
+                <span className="mb-1 block text-sm font-semibold text-ink">Instagram</span>
+                <Input name="instagramUrl" type="url" placeholder="https://instagram.com/qutoof" defaultValue={settings.instagramUrl ?? ''} />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-sm font-semibold text-ink">Facebook</span>
+                <Input name="facebookUrl" type="url" placeholder="https://facebook.com/qutoof" defaultValue={settings.facebookUrl ?? ''} />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-sm font-semibold text-ink">TikTok</span>
+                <Input name="tiktokUrl" type="url" placeholder="https://tiktok.com/@qutoof" defaultValue={settings.tiktokUrl ?? ''} />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-sm font-semibold text-ink">X (Twitter)</span>
+                <Input name="twitterUrl" type="url" placeholder="https://x.com/qutoof" defaultValue={settings.twitterUrl ?? ''} />
+              </label>
+            </div>
+          </div>
+
           <Button type="submit" variant="accent">
             {locale === 'en' ? 'Save' : 'حفظ'}
           </Button>
